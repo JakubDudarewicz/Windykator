@@ -22,6 +22,8 @@ private slots:
 
     void on_deleteTypeButton_clicked();
 
+    void on_deleteButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

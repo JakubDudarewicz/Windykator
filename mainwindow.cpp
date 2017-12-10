@@ -41,3 +41,12 @@ void MainWindow::on_deleteTypeButton_clicked()
     QListWidgetItem *item=items.at(0);
     delete item;
 }
+
+void MainWindow::on_deleteButton_clicked()
+{
+    QTreeWidgetItem *item = ui->treeWidget->currentItem();
+    int index = ui->treeWidget->indexOfTopLevelItem(item);
+    item = ui->treeWidget->takeTopLevelItem(index);
+    if(item)
+        delete item;
+}
