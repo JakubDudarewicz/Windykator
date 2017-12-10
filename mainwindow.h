@@ -18,6 +18,10 @@ public:
 private slots:
     void on_viewButton_clicked();
 
+    void on_addTypeButton_clicked();
+
+    void on_deleteTypeButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

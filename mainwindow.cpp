@@ -28,3 +28,16 @@ void MainWindow::on_viewButton_clicked()
     box.setText(QString(item->text(0).append(" owes me")));
     box.exec();
 }
+
+void MainWindow::on_addTypeButton_clicked()
+{
+    QString category = ui->typeNameEdit->text();
+    ui->typeList->addItem(category);
+}
+
+void MainWindow::on_deleteTypeButton_clicked()
+{
+    QList<QListWidgetItem *> items = ui->typeList->selectedItems();
+    QListWidgetItem *item=items.at(0);
+    delete item;
+}
