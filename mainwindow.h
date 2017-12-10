@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTreeWidgetItem>
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +28,8 @@ private slots:
     void on_deleteTypeButton_clicked();
 
     void on_deleteButton_clicked();
+
+    void on_addButton_clicked();
 
 private:
     Ui::MainWindow *ui;

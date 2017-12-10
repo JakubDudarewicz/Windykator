@@ -69,3 +69,11 @@ void MainWindow::AddBorrowedThing(QTreeWidgetItem *parent, QString name)
     item->setText(0, name);
     parent->addChild(item);
 }
+
+void MainWindow::on_addButton_clicked()
+{
+    ui->treeWidget->setColumnCount(1);
+    QString person = ui->whoBox->text();
+
+    AddObligor(person);
+}
