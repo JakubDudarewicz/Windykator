@@ -50,3 +50,22 @@ void MainWindow::on_deleteButton_clicked()
     if(item)
         delete item;
 }
+
+void MainWindow::AddObligor(QString person)
+{
+    QList<QListWidgetItem *> litems = ui->typeList->selectedItems();
+    QListWidgetItem *litem = litems.at(0);
+
+    QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
+    item->setText(0, person);
+
+    QString thing = litem->text();
+    AddBorrowedThing(item, thing);
+}
+
+void MainWindow::AddBorrowedThing(QTreeWidgetItem *parent, QString name)
+{
+    QTreeWidgetItem *item = new QTreeWidgetItem();
+    item->setText(0, name);
+    parent->addChild(item);
+}

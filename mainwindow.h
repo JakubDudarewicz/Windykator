@@ -12,6 +12,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    void AddObligor(QString person);
+
+    void AddBorrowedThing(QTreeWidgetItem *parent, QString name);
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
