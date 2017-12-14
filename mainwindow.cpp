@@ -50,7 +50,18 @@ void MainWindow::on_viewButton_clicked()
     QMessageBox box;
     QList<QTreeWidgetItem *> items = ui->treeWidget->selectedItems();
     QTreeWidgetItem *item = items.at(0);
-    box.setText(QString(item->text(0).append(" owes me")));
+    QString builder;
+    builder += item->text(0);
+    builder += " owes me:\n";
+    for(int i = 0; i < item->childCount(); i++)
+    {
+        builder += item->child(i)->text(0);
+        builder += " ";
+        builder += item->child(i)->text(1);
+        builder += " ";
+        builder += item->child(i)->text(2);
+    }
+    box.setText(builder);
     box.exec();
 }
 
