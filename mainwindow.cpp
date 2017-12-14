@@ -108,9 +108,6 @@ void MainWindow::AddObligor(QString person, QString description, QDate date, QSt
     Obligor = new QTreeWidgetItem(ui->treeWidget);
     Obligor->setText(0, person);
     new QTreeWidgetItem(Obligor, stringList, 0);
-
-    ui->whoBox->clear();
-    ui->commentEdit->clear();
 }
 
 void MainWindow::on_addButton_clicked()
@@ -119,6 +116,8 @@ void MainWindow::on_addButton_clicked()
                ui->commentEdit->toPlainText(),
                ui->calendarWidget->selectedDate(),
                ui->typeList->selectedItems().at(0)->text());
+
+    ui->commentEdit->clear();
 }
 
 void MainWindow::on_saveButton_clicked()
@@ -163,31 +162,16 @@ void MainWindow::on_editButton_clicked()
 {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
-     QString person;
-     QString description;
-     QString date;
-     QDate _date;
-
     if(item->parent() != NULL){
-        person = item->parent()->text(0);
-
-        description = item->text(1);
-        date = item->text(2);
-        _date = QDate::fromString(date,"dd.MM.yyyy");
-
-        ui->calendarWidget->setSelectedDate(_date);
-        ui->whoBox->setText(person);
-        ui->commentEdit->setText(description);
+        item->parent()->setText(0, ui->whoBox->text());
+        item->setText(0, ui->typeList->selectedItems().at(0)->text());
+        item->setText(1, ui->commentEdit->toPlainText());
+        item->setText(2, ui->calendarWidget->selectedDate().toString("dd.MM.yyyy"));
     }else{
-         person = ui->treeWidget->currentItem()->text(0);
-
-         description = ui->treeWidget->currentItem()->child(0)->text(1);
-         date = ui->treeWidget->currentItem()->child(0)->text(2);
-         _date = QDate::fromString(date,"dd.MM.yyyy");
-
-         ui->calendarWidget->setSelectedDate(_date);
-         ui->whoBox->setText(person);
-         ui->commentEdit->setText(description);
+        item->setText(0, ui->whoBox->text());
+        /*item->child(0)->setText(0, ui->typeList->selectedItems().at(0)->text());
+        item->child(0)->setText(1, ui->commentEdit->toPlainText());
+        item->child(0)->setText(2, ui->calendarWidget->selectedDate().toString("dd.MM.yyyy"));*/
     }
 }
 
@@ -213,34 +197,17 @@ void MainWindow::on_treeWidget_clicked(const QModelIndex &index)
     }else{
          person = ui->treeWidget->currentItem()->text(0);
 
-         description = ui->treeWidget->currentItem()->child(0)->text(1);
+         ui->commentEdit->clear();
+         /*description = ui->treeWidget->currentItem()->child(0)->text(1);
          date = ui->treeWidget->currentItem()->child(0)->text(2);
          _date = QDate::fromString(date,"dd.MM.yyyy");
 
          ui->calendarWidget->setSelectedDate(_date);
          ui->whoBox->setText(person);
-         ui->commentEdit->setText(description);
+         ui->commentEdit->setText(description);*/
     }
 }
 
-void MainWindow::on_saveButton_clicked()
-{
-   QTreeWidgetItem *item = ui->treeWidget->currentItem();
-
-   if(item->parent() != NULL){
-       item->parent()->setText(0, ui->whoBox->text());
-       item->setText(0, ui->typeList->selectedItems().at(0)->text());
-       item->setText(1, ui->commentEdit->toPlainText());
-       item->setText(2, ui->calendarWidget->selectedDate().toString("dd.MM.yyyy"));
-   }else{
-       item->setText(0, ui->whoBox->text());
-       item->child(0)->setText(0, ui->typeList->selectedItems().at(0)->text());
-       item->child(0)->setText(1, ui->commentEdit->toPlainText());
-       item->child(0)->setText(2, ui->calendarWidget->selectedDate().toString("dd.MM.yyyy"));
-   }
-
-
-}
 
 
 
