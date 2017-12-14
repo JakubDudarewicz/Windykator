@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    void AddObligor(QString person, QString description, QDate date);
+    void AddObligor(QString person, QString description, QDate date, QString type);
 
     void AddBorrowedThing(QTreeWidgetItem *parent, QString name);
 
@@ -37,8 +37,11 @@ private slots:
 
     void on_treeWidget_clicked(const QModelIndex &index);
 
+    void on_searchButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    QString findText;
 };
 
 #endif // MAINWINDOW_H

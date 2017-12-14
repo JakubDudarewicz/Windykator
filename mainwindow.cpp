@@ -1,3 +1,5 @@
+#include <QFile>
+#include <QTextStream>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "QMessageBox"
@@ -6,7 +8,37 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    findText = "";
     ui->setupUi(this);
+    ui->treeWidget->setColumnCount(3);
+    QFile *file = new QFile("data.txt");
+    if(!file->open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QMessageBox *box = new QMessageBox(NULL);
+        box->setText("something went horribly wrong, there is no file");
+        box->exec();
+        return;
+    }
+    QTextStream stream(file);
+    QString string = stream.readAll();
+    QStringList stringList = string.split("\n", QString::SkipEmptyParts);
+    QList<QStringList> list;
+    for(int i = 0; i < stringList.length(); i++)
+    {
+        list.append(stringList.at(i).split(",", QString::KeepEmptyParts));
+    }
+    for(int i = 0; i < list.length(); i++)
+    {
+        QString person = list.at(i).at(0);
+        QString description = list.at(i).at(1);
+        QString dateString = list.at(i).at(3);
+        QStringList dateList = dateString.split(".", QString::KeepEmptyParts);
+        QDate date(dateList.at(2).toInt(),
+                   dateList.at(1).toInt(),
+                   dateList.at(0).toInt());
+        QString type = list.at(i).at(2);
+        AddObligor(person, description, date, type);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -19,7 +51,18 @@ void MainWindow::on_viewButton_clicked()
     QMessageBox box;
     QList<QTreeWidgetItem *> items = ui->treeWidget->selectedItems();
     QTreeWidgetItem *item = items.at(0);
-    box.setText(QString(item->text(0).append(" owes me")));
+    QString builder;
+    builder += item->text(0);
+    builder += " owes me:\n";
+    for(int i = 0; i < item->childCount(); i++)
+    {
+        builder += item->child(i)->text(0);
+        builder += " ";
+        builder += item->child(i)->text(1);
+        builder += " ";
+        builder += item->child(i)->text(2);
+    }
+    box.setText(builder);
     box.exec();
 }
 
@@ -45,15 +88,26 @@ void MainWindow::on_deleteButton_clicked()
         delete item;
 }
 
-void MainWindow::AddObligor(QString person, QString description, QDate date)
+void MainWindow::AddObligor(QString person, QString description, QDate date, QString type)
 {
-    QTreeWidgetItem *Obligor = new QTreeWidgetItem(ui->treeWidget);
-    Obligor->setText(0, person);
+    QTreeWidgetItemIterator iterator(ui->treeWidget);
+    QTreeWidgetItem *Obligor;
     QList<QString> stringList;
-    stringList.append(ui->typeList->selectedItems().at(0)->text());
+    stringList.append(type);
     stringList.append(description);
     stringList.append(date.toString("dd.MM.yyyy"));
-    QTreeWidgetItem *Item = new QTreeWidgetItem(Obligor, stringList, 0);
+
+    while(*iterator) {
+        if ((*iterator)->text(0) == person)
+        {
+            new QTreeWidgetItem(*iterator, stringList, 0);
+            return;
+        }
+        ++iterator;
+    }
+    Obligor = new QTreeWidgetItem(ui->treeWidget);
+    Obligor->setText(0, person);
+    new QTreeWidgetItem(Obligor, stringList, 0);
 
     ui->whoBox->clear();
     ui->commentEdit->clear();
@@ -61,8 +115,48 @@ void MainWindow::AddObligor(QString person, QString description, QDate date)
 
 void MainWindow::on_addButton_clicked()
 {
-    ui->treeWidget->setColumnCount(3);
-    AddObligor(ui->whoBox->text(), ui->commentEdit->toPlainText(), ui->calendarWidget->selectedDate());
+    AddObligor(ui->whoBox->text(),
+               ui->commentEdit->toPlainText(),
+               ui->calendarWidget->selectedDate(),
+               ui->typeList->selectedItems().at(0)->text());
+}
+
+void MainWindow::on_saveButton_clicked()
+{
+    QFile *file = new QFile("data.txt");
+    if(!file->open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox *box = new QMessageBox(NULL);
+        box->setText("something went horribly wrong");
+        return;
+    }
+    QTextStream stream(file);
+    QString string;
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); i++)
+    {
+        string += ui->treeWidget->topLevelItem(i)->text(0);
+        string += ",";
+        string += ui->treeWidget->topLevelItem(i)->child(0)->text(0);
+        string += ",";
+        string += ui->treeWidget->topLevelItem(i)->child(0)->text(1);
+        string += ",";
+        string += ui->treeWidget->topLevelItem(i)->child(0)->text(2);
+        string += "\n";
+    }
+    stream << string;
+}
+
+void MainWindow::on_searchButton_clicked()
+{
+    QString itemText =ui->searchEdit->text();
+    QTreeWidgetItemIterator iterator(ui->treeWidget);
+    while(*iterator) {
+        if ((*iterator)->text(0) == itemText)
+            (*iterator)->setTextColor(0,QColor( "red" ));
+        else
+            (*iterator)->setTextColor(0,QColor( "black" ));
+        ++iterator;
+    }
 }
 
 void MainWindow::on_editButton_clicked()
