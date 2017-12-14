@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    findText = "";
     ui->setupUi(this);
     ui->treeWidget->setColumnCount(3);
     QFile *file = new QFile("data.txt");
@@ -129,4 +130,18 @@ void MainWindow::on_saveButton_clicked()
         string += "\n";
     }
    stream << string;
+}
+
+void MainWindow::on_searchButton_clicked()
+{
+    QString itemText =ui->searchEdit->text();
+    QTreeWidgetItemIterator iterator(ui->treeWidget);
+     while(*iterator) {
+         if ((*iterator)->text(0) == itemText)
+            (*iterator)->setTextColor(0,QColor( "red" ));
+         else
+              (*iterator)->setTextColor(0,QColor( "black" ));
+         ++iterator;
+     }
+
 }
