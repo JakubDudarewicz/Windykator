@@ -31,6 +31,12 @@ private slots:
 
     void on_addButton_clicked();
 
+    void on_editButton_clicked();
+
+    void on_saveButton_clicked();
+
+    void on_treeWidget_clicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
 };
