@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     if(!file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QMessageBox *box = new QMessageBox(NULL);
-        box->setText("something went horribly wrong");
+        box->setText("something went horribly wrong, there is no file");
+        box->exec();
         return;
     }
     QTextStream stream(file);
