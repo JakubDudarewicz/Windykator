@@ -25,19 +25,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QList<QStringList> list;
     for(int i = 0; i < stringList.length(); i++)
     {
-        list.append(stringList.at(i).split(",", QString::KeepEmptyParts));
+        list.append(stringList.at(i).split(";", QString::KeepEmptyParts));
     }
     for(int i = 0; i < list.length(); i++)
     {
         QString person = list.at(i).at(0);
-        QString description = list.at(i).at(1);
-        QString dateString = list.at(i).at(3);
-        QStringList dateList = dateString.split(".", QString::KeepEmptyParts);
-        QDate date(dateList.at(2).toInt(),
-                   dateList.at(1).toInt(),
-                   dateList.at(0).toInt());
-        QString type = list.at(i).at(2);
-        AddObligor(person, description, date, type);
+        QStringList debtsList;
+        for(int j = 1; j < list.at(i).length(); j++)
+        {
+            debtsList = list.at(i).at(j).split(",");
+            QString description = debtsList.at(0);
+            QString dateString = debtsList.at(2);
+            QStringList dateList = dateString.split(".", QString::KeepEmptyParts);
+            QDate date(dateList.at(2).toInt(),
+                       dateList.at(1).toInt(),
+                       dateList.at(0).toInt());
+            QString type = debtsList.at(1);
+            AddObligor(person, description, date, type);
+        }
     }
 }
 
@@ -131,12 +136,15 @@ void MainWindow::on_saveButton_clicked()
     for(int i = 0; i < ui->treeWidget->topLevelItemCount(); i++)
     {
         string += ui->treeWidget->topLevelItem(i)->text(0);
-        string += ",";
-        string += ui->treeWidget->topLevelItem(i)->child(0)->text(0);
-        string += ",";
-        string += ui->treeWidget->topLevelItem(i)->child(0)->text(1);
-        string += ",";
-        string += ui->treeWidget->topLevelItem(i)->child(0)->text(2);
+        for(int j = 0; j < ui->treeWidget->topLevelItem(i)->childCount(); j++)
+        {
+            string += ";";
+            string += ui->treeWidget->topLevelItem(i)->child(j)->text(0);
+            string += ",";
+            string += ui->treeWidget->topLevelItem(i)->child(j)->text(1);
+            string += ",";
+            string += ui->treeWidget->topLevelItem(i)->child(j)->text(2);
+        }
         string += "\n";
     }
     stream << string;
