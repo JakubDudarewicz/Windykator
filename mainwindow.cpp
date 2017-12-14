@@ -58,8 +58,6 @@ void MainWindow::AddObligor(QString person, QString description, QDate date)
 
 void MainWindow::on_addButton_clicked()
 {
-    ui->treeWidget->setColumnCount(1);
-    QString person = ui->whoBox->text();
-
+    ui->treeWidget->setColumnCount(3);
     AddObligor(ui->whoBox->text(), ui->commentEdit->toPlainText(), ui->calendarWidget->selectedDate());
 }
