@@ -177,9 +177,6 @@ void MainWindow::on_editButton_clicked()
         item->setText(2, ui->calendarWidget->selectedDate().toString("dd.MM.yyyy"));
     }else{
         item->setText(0, ui->whoBox->text());
-        /*item->child(0)->setText(0, ui->typeList->selectedItems().at(0)->text());
-        item->child(0)->setText(1, ui->commentEdit->toPlainText());
-        item->child(0)->setText(2, ui->calendarWidget->selectedDate().toString("dd.MM.yyyy"));*/
     }
 }
 
@@ -206,13 +203,6 @@ void MainWindow::on_treeWidget_clicked(const QModelIndex &index)
          person = ui->treeWidget->currentItem()->text(0);
 
          ui->commentEdit->clear();
-         /*description = ui->treeWidget->currentItem()->child(0)->text(1);
-         date = ui->treeWidget->currentItem()->child(0)->text(2);
-         _date = QDate::fromString(date,"dd.MM.yyyy");
-
-         ui->calendarWidget->setSelectedDate(_date);
-         ui->whoBox->setText(person);
-         ui->commentEdit->setText(description);*/
     }
 }
 
