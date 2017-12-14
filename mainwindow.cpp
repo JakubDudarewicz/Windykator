@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    findText = "";
     ui->setupUi(this);
 }
 
@@ -62,4 +63,18 @@ void MainWindow::on_addButton_clicked()
     QString person = ui->whoBox->text();
 
     AddObligor(ui->whoBox->text(), ui->commentEdit->toPlainText(), ui->calendarWidget->selectedDate());
+}
+
+void MainWindow::on_searchButton_clicked()
+{
+    QString itemText =ui->searchEdit->text();
+    QTreeWidgetItemIterator iterator(ui->treeWidget);
+     while(*iterator) {
+         if ((*iterator)->text(0) == itemText)
+            (*iterator)->setTextColor(0,QColor( "red" ));
+         else
+              (*iterator)->setTextColor(0,QColor( "black" ));
+         ++iterator;
+     }
+
 }

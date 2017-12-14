@@ -31,8 +31,11 @@ private slots:
 
     void on_addButton_clicked();
 
+    void on_searchButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    QString findText;
 };
 
 #endif // MAINWINDOW_H
