@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    void AddObligor(QString person, QString description, QDate date);
+    void AddObligor(QString person, QString description, QDate date, QString type);
 
     void AddBorrowedThing(QTreeWidgetItem *parent, QString name);
 
@@ -30,6 +30,8 @@ private slots:
     void on_deleteButton_clicked();
 
     void on_addButton_clicked();
+
+    void on_saveButton_clicked();
 
 private:
     Ui::MainWindow *ui;
