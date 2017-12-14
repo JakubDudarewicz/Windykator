@@ -90,13 +90,23 @@ void MainWindow::on_deleteButton_clicked()
 
 void MainWindow::AddObligor(QString person, QString description, QDate date, QString type)
 {
-    QTreeWidgetItem *Obligor = new QTreeWidgetItem(ui->treeWidget);
-    Obligor->setText(0, person);
+    QTreeWidgetItemIterator iterator(ui->treeWidget);
+    QTreeWidgetItem *Obligor;
     QList<QString> stringList;
     stringList.append(type);
     stringList.append(description);
     stringList.append(date.toString("dd.MM.yyyy"));
-    QTreeWidgetItem *Item = new QTreeWidgetItem(Obligor, stringList, 0);
+    while(*iterator) {
+        if ((*iterator)->text(0) == person)
+        {
+            new QTreeWidgetItem(*iterator, stringList, 0);
+            return;
+        }
+        ++iterator;
+    }
+    Obligor = new QTreeWidgetItem(ui->treeWidget);
+    Obligor->setText(0, person);
+    new QTreeWidgetItem(Obligor, stringList, 0);
 }
 
 void MainWindow::on_addButton_clicked()
@@ -129,19 +139,18 @@ void MainWindow::on_saveButton_clicked()
         string += ui->treeWidget->topLevelItem(i)->child(0)->text(2);
         string += "\n";
     }
-   stream << string;
+    stream << string;
 }
 
 void MainWindow::on_searchButton_clicked()
 {
     QString itemText =ui->searchEdit->text();
     QTreeWidgetItemIterator iterator(ui->treeWidget);
-     while(*iterator) {
-         if ((*iterator)->text(0) == itemText)
+    while(*iterator) {
+        if ((*iterator)->text(0) == itemText)
             (*iterator)->setTextColor(0,QColor( "red" ));
-         else
-              (*iterator)->setTextColor(0,QColor( "black" ));
-         ++iterator;
-     }
-
+        else
+            (*iterator)->setTextColor(0,QColor( "black" ));
+        ++iterator;
+    }
 }
