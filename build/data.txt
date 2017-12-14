@@ -1,4 +1,0 @@
-Jan Kowalski,hajs,200,24.01.2018
-Jan Nowak,hajs,200,02.03.2018
-Ryszard Hajzer,hajs,200,12.02.2018
-Gra¿yna Korwin,hajs,200,21.05.2018
