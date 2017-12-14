@@ -88,8 +88,17 @@ void MainWindow::on_viewButton_clicked()
 
 void MainWindow::on_addTypeButton_clicked()
 {
+    QMessageBox *box = new QMessageBox(NULL);
+    box->setText("Enter the name of type");
+
     QString category = ui->typeNameEdit->text();
-    ui->typeList->addItem(category);
+
+    if(category != "")
+        ui->typeList->addItem(category);
+    else
+        box->exec();
+
+    ui->typeNameEdit->clear();
 }
 
 void MainWindow::on_deleteTypeButton_clicked()
