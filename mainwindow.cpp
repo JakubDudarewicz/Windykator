@@ -31,9 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
         QString description = list.at(i).at(1);
         QString dateString = list.at(i).at(3);
         QStringList dateList = dateString.split(".", QString::KeepEmptyParts);
-        QDate date(dateList.at(0).toInt(),
+        QDate date(dateList.at(2).toInt(),
                    dateList.at(1).toInt(),
-                   dateList.at(2).toInt());
+                   dateList.at(0).toInt());
         QString type = list.at(i).at(2);
         AddObligor(person, description, date, type);
     }
