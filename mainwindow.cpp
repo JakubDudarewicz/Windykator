@@ -87,10 +87,15 @@ void MainWindow::on_deleteTypeButton_clicked()
 void MainWindow::on_deleteButton_clicked()
 {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
-    int index = ui->treeWidget->indexOfTopLevelItem(item);
-    item = ui->treeWidget->takeTopLevelItem(index);
-    if(item)
-        delete item;
+
+    if(item->parent() != NULL){
+        item->parent()->removeChild(item);
+    }else{
+        int index = ui->treeWidget->indexOfTopLevelItem(item);
+        item = ui->treeWidget->takeTopLevelItem(index);
+        if(item)
+            delete item;
+    }
 }
 
 void MainWindow::AddObligor(QString person, QString description, QDate date, QString type)
