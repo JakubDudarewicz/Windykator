@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    void AddObligor(QString person);
+    void AddObligor(QString person, QString description, QDate date);
 
     void AddBorrowedThing(QTreeWidgetItem *parent, QString name);
 

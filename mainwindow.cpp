@@ -7,12 +7,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->treeWidget->setColumnCount(1);
-    QList<QTreeWidgetItem *> items;
-    items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Kowalski"))));
-    items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Nowak"))));
-    items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Paprocka"))));
-    ui->treeWidget->insertTopLevelItems(0, items);
 }
 
 MainWindow::~MainWindow()
@@ -51,23 +45,15 @@ void MainWindow::on_deleteButton_clicked()
         delete item;
 }
 
-void MainWindow::AddObligor(QString person)
+void MainWindow::AddObligor(QString person, QString description, QDate date)
 {
-    QList<QListWidgetItem *> litems = ui->typeList->selectedItems();
-    QListWidgetItem *litem = litems.at(0);
-
-    QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
-    item->setText(0, person);
-
-    QString thing = litem->text();
-    AddBorrowedThing(item, thing);
-}
-
-void MainWindow::AddBorrowedThing(QTreeWidgetItem *parent, QString name)
-{
-    QTreeWidgetItem *item = new QTreeWidgetItem();
-    item->setText(0, name);
-    parent->addChild(item);
+    QTreeWidgetItem *Obligor = new QTreeWidgetItem(ui->treeWidget);
+    Obligor->setText(0, person);
+    QList<QString> stringList;
+    stringList.append(ui->typeList->selectedItems().at(0)->text());
+    stringList.append(description);
+    stringList.append(date.toString("dd.MM.yyyy"));
+    QTreeWidgetItem *Item = new QTreeWidgetItem(Obligor, stringList, 0);
 }
 
 void MainWindow::on_addButton_clicked()
@@ -75,5 +61,5 @@ void MainWindow::on_addButton_clicked()
     ui->treeWidget->setColumnCount(1);
     QString person = ui->whoBox->text();
 
-    AddObligor(person);
+    AddObligor(ui->whoBox->text(), ui->commentEdit->toPlainText(), ui->calendarWidget->selectedDate());
 }
