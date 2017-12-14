@@ -31,11 +31,9 @@ private slots:
 
     void on_addButton_clicked();
 
-<<<<<<< HEAD
     void on_saveButton_clicked();
-=======
+
     void on_searchButton_clicked();
->>>>>>> searchButton
 
 private:
     Ui::MainWindow *ui;
