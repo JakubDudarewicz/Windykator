@@ -56,12 +56,9 @@ MainWindow::MainWindow(QWidget *parent) :
                 remindStr+=debtsList.at(0);
                 remindStr+=", ";
                 remindStr+=debtsList.at(2);
-
-                remindStr+=", ";
                 if(i!=stringList.length()-1)
                     remindStr+="\n";
             }
-            AddObligor(person, description, date, type);
         }
     }
     remindBox->setText(remindStr);
