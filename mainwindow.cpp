@@ -34,13 +34,13 @@ MainWindow::MainWindow(QWidget *parent) :
         for(int j = 1; j < list.at(i).length(); j++)
         {
             debtsList = list.at(i).at(j).split(",");
-            QString description = debtsList.at(0);
+            QString description = debtsList.at(1);
             QString dateString = debtsList.at(2);
             QStringList dateList = dateString.split(".", QString::KeepEmptyParts);
             QDate date(dateList.at(2).toInt(),
                        dateList.at(1).toInt(),
                        dateList.at(0).toInt());
-            QString type = debtsList.at(1);
+            QString type = debtsList.at(0);
             AddObligor(person, description, date, type);
         }
     }
@@ -122,12 +122,19 @@ void MainWindow::AddObligor(QString person, QString description, QDate date, QSt
 
 void MainWindow::on_addButton_clicked()
 {
-    AddObligor(ui->whoBox->text(),
-               ui->commentEdit->toPlainText(),
-               ui->calendarWidget->selectedDate(),
-               ui->typeList->selectedItems().at(0)->text());
-
-    ui->commentEdit->clear();
+    QString who = ui->whoBox->text();
+    QString comment = ui->commentEdit->toPlainText();
+    QDate date = ui->calendarWidget->selectedDate();
+    QString type;
+    int count = ui->typeList->selectedItems().count();
+    if(count &
+       (who != "") &
+       (comment != "") &
+       (date > QDate::currentDate()))
+        type = ui->typeList->selectedItems().at(0)->text();
+    else
+        return;
+    AddObligor(who, comment, date, type);
 }
 
 void MainWindow::on_saveButton_clicked()
