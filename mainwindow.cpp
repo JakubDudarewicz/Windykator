@@ -39,17 +39,17 @@ MainWindow::MainWindow(QWidget *parent) :
         for(int j = 1; j < list.at(i).length(); j++)
         {
             debtsList = list.at(i).at(j).split(",");
-            QString description = debtsList.at(0);
+            QString description = debtsList.at(1);
             QString dateString = debtsList.at(2);
             QStringList dateList = dateString.split(".", QString::KeepEmptyParts);
             QDate date(dateList.at(2).toInt(),
                        dateList.at(1).toInt(),
                        dateList.at(0).toInt());
-            QString type = debtsList.at(1);
+            QString type = debtsList.at(0);
             AddObligor(person, description, date, type);
 
-            if((date.daysTo(deadline) < numDays) &&
-               (date.daysTo(deadline) > -1))
+            if((date.daysTo(deadline) <= numDays) &&
+               (date.daysTo(deadline) >= -1))
             {
                 remindStr+=list.at(i).at(0);
                 remindStr+=", ";
@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 if(i!=stringList.length()-1)
                     remindStr+="\n";
             }
+            AddObligor(person, description, date, type);
         }
     }
     remindBox->setText(remindStr);
@@ -167,12 +168,19 @@ void MainWindow::AddObligor(QString person, QString description, QDate date, QSt
 
 void MainWindow::on_addButton_clicked()
 {
-    AddObligor(ui->whoBox->text(),
-               ui->commentEdit->toPlainText(),
-               ui->calendarWidget->selectedDate(),
-               ui->typeList->selectedItems().at(0)->text());
-
-    ui->commentEdit->clear();
+    QString who = ui->whoBox->text();
+    QString comment = ui->commentEdit->toPlainText();
+    QDate date = ui->calendarWidget->selectedDate();
+    QString type;
+    int count = ui->typeList->selectedItems().count();
+    if(count &
+       (who != "") &
+       (comment != "") &
+       (date > QDate::currentDate()))
+        type = ui->typeList->selectedItems().at(0)->text();
+    else
+        return;
+    AddObligor(who, comment, date, type);
 }
 
 void MainWindow::on_saveButton_clicked()
@@ -219,7 +227,7 @@ void MainWindow::on_searchButton_clicked()
 void MainWindow::on_editButton_clicked()
 {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
-
+    if(!ui->typeList->selectedItems().count()) return;
     if(item->parent() != NULL){
         item->parent()->setText(0, ui->whoBox->text());
         item->setText(0, ui->typeList->selectedItems().at(0)->text());
@@ -230,13 +238,14 @@ void MainWindow::on_editButton_clicked()
     }
 }
 
-void MainWindow::on_treeWidget_clicked(const QModelIndex &index)
+void MainWindow::on_treeWidget_clicked()
 {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
      QString person;
      QString description;
      QString date;
+     QString type;
      QDate _date;
 
     if(item->parent() != NULL){
@@ -245,6 +254,7 @@ void MainWindow::on_treeWidget_clicked(const QModelIndex &index)
         description = item->text(1);
         date = item->text(2);
         _date = QDate::fromString(date,"dd.MM.yyyy");
+        type = item->text(0);
 
         ui->calendarWidget->setSelectedDate(_date);
         ui->whoBox->setText(person);
@@ -255,8 +265,3 @@ void MainWindow::on_treeWidget_clicked(const QModelIndex &index)
          ui->commentEdit->clear();
     }
 }
-
-
-
-
-
