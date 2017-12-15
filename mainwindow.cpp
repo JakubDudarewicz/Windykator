@@ -54,27 +54,51 @@ MainWindow::~MainWindow()
 void MainWindow::on_viewButton_clicked()
 {
     QMessageBox box;
-    QList<QTreeWidgetItem *> items = ui->treeWidget->selectedItems();
-    QTreeWidgetItem *item = items.at(0);
     QString builder;
-    builder += item->text(0);
-    builder += " owes me:\n";
-    for(int i = 0; i < item->childCount(); i++)
-    {
-        builder += item->child(i)->text(0);
+    QTreeWidgetItem *item = ui->treeWidget->currentItem();
+
+    if(item->parent() != NULL){
+        builder += item->parent()->text(0);
+        builder += " owes me:\n";
+        builder += item->text(0);
         builder += " ";
-        builder += item->child(i)->text(1);
+        builder += item->text(1);
         builder += " ";
-        builder += item->child(i)->text(2);
+        builder += item->text(2);
+        builder += "\n";
+
+        box.setText(builder);
+        box.exec();
+    }else{
+        builder += item->text(0);
+        builder += " owes me:\n";
+        for(int i = 0; i < item->childCount(); i++)
+        {
+            builder += item->child(i)->text(0);
+            builder += ": ";
+            builder += item->child(i)->text(1);
+            builder += " ";
+            builder += item->child(i)->text(2);
+            builder += "\n";
+        }
+        box.setText(builder);
+        box.exec();
     }
-    box.setText(builder);
-    box.exec();
 }
 
 void MainWindow::on_addTypeButton_clicked()
 {
+    QMessageBox *box = new QMessageBox(NULL);
+    box->setText("Enter the name of type");
+
     QString category = ui->typeNameEdit->text();
-    ui->typeList->addItem(category);
+
+    if(category != "")
+        ui->typeList->addItem(category);
+    else
+        box->exec();
+
+    ui->typeNameEdit->clear();
 }
 
 void MainWindow::on_deleteTypeButton_clicked()
