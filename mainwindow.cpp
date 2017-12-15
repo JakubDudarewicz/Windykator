@@ -205,7 +205,7 @@ void MainWindow::on_searchButton_clicked()
 void MainWindow::on_editButton_clicked()
 {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
-
+    if(!ui->typeList->selectedItems().count()) return;
     if(item->parent() != NULL){
         item->parent()->setText(0, ui->whoBox->text());
         item->setText(0, ui->typeList->selectedItems().at(0)->text());
@@ -223,6 +223,7 @@ void MainWindow::on_treeWidget_clicked(const QModelIndex &index)
      QString person;
      QString description;
      QString date;
+     QString type;
      QDate _date;
 
     if(item->parent() != NULL){
@@ -231,6 +232,7 @@ void MainWindow::on_treeWidget_clicked(const QModelIndex &index)
         description = item->text(1);
         date = item->text(2);
         _date = QDate::fromString(date,"dd.MM.yyyy");
+        type = item->text(0);
 
         ui->calendarWidget->setSelectedDate(_date);
         ui->whoBox->setText(person);
@@ -241,8 +243,3 @@ void MainWindow::on_treeWidget_clicked(const QModelIndex &index)
          ui->commentEdit->clear();
     }
 }
-
-
-
-
-
